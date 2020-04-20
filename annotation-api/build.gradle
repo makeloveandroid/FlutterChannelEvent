@@ -1,0 +1,26 @@
+apply plugin: 'java-library'
+apply plugin: 'kotlin'
+
+// 打包maven
+apply plugin: 'maven'
+group = rootProject.ext.mavenGroup
+archivesBaseName = 'annotation-api'
+version = rootProject.ext.mavenVersion
+
+repositories.mavenCentral()
+
+uploadArchives {
+    repositories.mavenDeployer {
+        repository(url: "file:$rootProject.ext.mavenpath")
+    }
+}
+
+
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+}
+
+sourceCompatibility = "7"
+targetCompatibility = "7"

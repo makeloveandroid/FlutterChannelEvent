@@ -1,0 +1,48 @@
+apply plugin: 'java-library'
+apply plugin: 'kotlin'
+
+// 1. 若是使用Kotlin开发,需要加这句,意思是使用 Kotlin APT(注解处理器)
+apply plugin: 'kotlin-kapt'
+
+// 打包maven
+apply plugin: 'maven'
+group = rootProject.ext.mavenGroup
+archivesBaseName = 'channel-processor'
+version = rootProject.ext.mavenVersion
+
+repositories.mavenCentral()
+
+uploadArchives {
+    repositories.mavenDeployer {
+        repository(url: "file:$rootProject.ext.mavenpath")
+    }
+}
+
+
+
+dependencies {
+    // 2.依赖 com.google.auto.service:auto-service 这个是为了我们方便开发插件 Google 为我们提供的一个注解处理器插件依赖
+    compileOnly 'com.google.auto.service:auto-service:1.0-rc4'
+
+    // 3.使用 auto-service 注解处理器
+    kapt 'com.google.auto.service:auto-service:1.0-rc4'
+
+    // 4. 依赖 javapoet (用于动态生成 Java 文件)
+    implementation 'com.squareup:javapoet:1.8.0'
+
+    // todo 如果你使用的是 Java 语言开发,3与4步骤省略,只需要: implementation 'com.google.auto.service:auto-service:1.0-rc4' 即可
+
+
+
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation project(path: ':annotation-api')
+}
+
+sourceSets {
+    main.java.srcDirs += 'src/main/kotlin'
+}
+
+
+sourceCompatibility = JavaVersion.VERSION_1_7
+targetCompatibility = JavaVersion.VERSION_1_7

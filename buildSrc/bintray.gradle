@@ -1,0 +1,17 @@
+def mavenpath="/Users/wenyingzhi/Desktop/work/todo_flutter/todo/android/local_maven"
+def mavenGroup="com.qihoo.qchannel"
+def mavenVersion="1.0"
+
+// 打包maven
+apply plugin: 'maven'
+group = mavenGroup
+archivesBaseName = 'qchannel-plugin'
+version = mavenVersion
+
+repositories.mavenCentral()
+
+uploadArchives {
+    repositories.mavenDeployer {
+        repository(url: "file:$mavenpath")
+    }
+}
